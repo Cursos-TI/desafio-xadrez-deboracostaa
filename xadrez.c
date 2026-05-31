@@ -1,93 +1,133 @@
 #include <stdio.h>
 
 /*
- * Desafio: nivel aventureiro - Movimentando as pecas do xadrez.
+ * Desafio: nivel mestre - Criando movimentos complexos.
  *
- * Este programa simula movimentos simples de tres pecas:
- * - Torre: cinco casas para a direita usando for.
- * - Bispo: cinco casas na diagonal para cima e direita usando while.
- * - Rainha: oito casas para a esquerda usando do-while.
- * - Cavalo: duas casas para baixo e uma para a esquerda usando loops aninhados.
+ * Este programa simula movimentos especificos de quatro pecas de xadrez:
+ * - Torre: cinco casas para a direita usando recursividade.
+ * - Bispo: cinco casas na diagonal para cima e direita usando recursividade
+ *   combinada com loops aninhados.
+ * - Rainha: oito casas para a esquerda usando recursividade.
+ * - Cavalo: duas casas para cima e uma casa para a direita usando loops
+ *   aninhados com controle de fluxo por continue e break.
  *
- * Os valores de casas sao definidos diretamente no codigo, conforme pedido
- * no enunciado. Nao ha entrada de dados do usuario neste desafio.
+ * Todos os valores de movimento sao definidos diretamente no codigo, conforme
+ * solicitado no enunciado. O programa nao recebe dados do usuario.
  */
+
+/*
+ * Funcao recursiva para o movimento da Torre.
+ *
+ * Parametro casasRestantes:
+ * controla quantas casas ainda precisam ser percorridas. A cada chamada, uma
+ * casa e impressa e o valor diminui em 1. Quando chega a zero, a recursao para.
+ */
+void moverTorre(int casasRestantes) {
+    if (casasRestantes <= 0) {
+        return;
+    }
+
+    printf("Direita\n");
+    moverTorre(casasRestantes - 1);
+}
+
+/*
+ * Funcao recursiva para o movimento do Bispo.
+ *
+ * O Bispo anda na diagonal. Para cada casa diagonal, o loop externo representa
+ * o deslocamento vertical e o loop interno representa o deslocamento horizontal.
+ * Como o movimento solicitado e para cima e direita, cada chamada recursiva
+ * imprime uma etapa vertical ("Cima") e uma etapa horizontal ("Direita").
+ */
+void moverBispo(int casasRestantes) {
+    int movimentoVertical;
+    int movimentoHorizontal;
+
+    if (casasRestantes <= 0) {
+        return;
+    }
+
+    for (movimentoVertical = 1; movimentoVertical <= 1; movimentoVertical++) {
+        printf("Cima\n");
+
+        for (movimentoHorizontal = 1; movimentoHorizontal <= 1; movimentoHorizontal++) {
+            printf("Direita\n");
+        }
+    }
+
+    moverBispo(casasRestantes - 1);
+}
+
+/*
+ * Funcao recursiva para o movimento da Rainha.
+ *
+ * A Rainha pode se mover em varias direcoes. Neste desafio, ela percorre oito
+ * casas para a esquerda. A condicao de parada evita chamadas recursivas
+ * desnecessarias e impede que a funcao continue indefinidamente.
+ */
+void moverRainha(int casasRestantes) {
+    if (casasRestantes <= 0) {
+        return;
+    }
+
+    printf("Esquerda\n");
+    moverRainha(casasRestantes - 1);
+}
+
 int main(void) {
-    /* Quantidade de casas que cada peca deve percorrer no tabuleiro. */
+    /* Quantidade de casas usadas pelas funcoes recursivas. */
     int casasTorre = 5;
     int casasBispo = 5;
     int casasRainha = 8;
-    int casasBaixoCavalo = 2;
-    int casasEsquerdaCavalo = 1;
 
-    /* Variaveis contadoras usadas para controlar as repeticoes. */
-    int contador;
-    int casaAtualBispo = 1;
-    int casaAtualRainha = 1;
+    /*
+     * Quantidade de casas do Cavalo em formato de "L":
+     * duas casas para cima e uma casa para a direita.
+     */
+    int casasCimaCavalo = 2;
+    int casasDireitaCavalo = 1;
+
+    /*
+     * Variaveis dos loops complexos do Cavalo.
+     * etapaCavalo define se o programa esta na parte vertical ou horizontal.
+     * casaAtualCavalo controla cada casa percorrida dentro da etapa atual.
+     * limiteEtapa guarda quantas casas devem ser impressas naquela etapa.
+     */
     int etapaCavalo;
     int casaAtualCavalo;
+    int limiteEtapa;
 
-    /*
-     * Movimento da Torre:
-     * a Torre anda em linha reta. Neste desafio, ela percorre cinco casas
-     * para a direita. O loop for e adequado quando sabemos antecipadamente
-     * quantas repeticoes serao executadas.
-     */
     printf("Movimento da Torre:\n");
-    for (contador = 1; contador <= casasTorre; contador++) {
-        printf("Direita\n");
-    }
+    moverTorre(casasTorre);
 
-    /*
-     * Movimento do Bispo:
-     * o Bispo anda na diagonal. Para representar a diagonal para cima e
-     * direita, imprimimos as duas direcoes a cada casa percorrida.
-     * O while repete enquanto a casa atual nao ultrapassar o total definido.
-     */
     printf("\nMovimento do Bispo:\n");
-    while (casaAtualBispo <= casasBispo) {
-        printf("Cima Direita\n");
-        casaAtualBispo++;
-    }
+    moverBispo(casasBispo);
 
-    /*
-     * Movimento da Rainha:
-     * a Rainha pode andar em varias direcoes. Aqui simulamos apenas o
-     * movimento de oito casas para a esquerda. O do-while executa o bloco
-     * pelo menos uma vez e depois verifica se ainda deve continuar.
-     */
     printf("\nMovimento da Rainha:\n");
-    do {
-        printf("Esquerda\n");
-        casaAtualRainha++;
-    } while (casaAtualRainha <= casasRainha);
+    moverRainha(casasRainha);
 
     /*
      * Movimento do Cavalo:
-     * o Cavalo se move em "L". Neste desafio, o movimento e composto por
-     * duas casas para baixo e uma casa para a esquerda.
+     * o for externo possui multiplas variaveis: etapaCavalo controla a etapa
+     * do movimento e limiteEtapa define a quantidade de casas daquela etapa.
      *
-     * O for externo separa as etapas principais do movimento:
-     * - etapa 1: movimento vertical para baixo;
-     * - etapa 2: movimento horizontal para a esquerda.
-     *
-     * O while interno imprime a quantidade de casas de cada etapa, formando
-     * a sequencia esperada: Baixo, Baixo, Esquerda.
+     * O for interno percorre as casas da etapa atual. O continue deixa claro
+     * que, enquanto a etapa vertical nao terminou, o fluxo deve voltar para a
+     * proxima repeticao imprimindo "Cima". O break encerra a etapa horizontal
+     * assim que a unica casa para a direita e impressa.
      */
     printf("\nMovimento do Cavalo:\n");
-    for (etapaCavalo = 1; etapaCavalo <= 2; etapaCavalo++) {
-        casaAtualCavalo = 1;
+    for (etapaCavalo = 1, limiteEtapa = casasCimaCavalo;
+         etapaCavalo <= 2;
+         etapaCavalo++, limiteEtapa = casasDireitaCavalo) {
+        for (casaAtualCavalo = 1; casaAtualCavalo <= limiteEtapa; casaAtualCavalo++) {
+            if (etapaCavalo == 1) {
+                printf("Cima\n");
+                continue;
+            }
 
-        if (etapaCavalo == 1) {
-            while (casaAtualCavalo <= casasBaixoCavalo) {
-                printf("Baixo\n");
-                casaAtualCavalo++;
-            }
-        } else {
-            while (casaAtualCavalo <= casasEsquerdaCavalo) {
-                printf("Esquerda\n");
-                casaAtualCavalo++;
-            }
+            printf("Direita\n");
+            break;
         }
     }
 
